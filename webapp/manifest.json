@@ -1,0 +1,175 @@
+{
+  "_version": "1.81.0",
+  "sap.app": {
+    "id": "ecommercehub",
+    "type": "application",
+    "i18n": "i18n/i18n.properties",
+    "applicationVersion": {
+      "version": "0.0.1"
+    },
+    "title": "{{appTitle}}",
+    "description": "{{appDescription}}",
+    "resources": "resources.json",
+    "sourceTemplate": {
+      "id": "@sap/generator-fiori:basic",
+      "version": "1.20.1",
+      "toolsId": "f4eeec02-a2c6-409b-bd5f-213fc59d9a36"
+    },
+    "dataSources": {
+      "mainService": {
+        "uri": "/odata/v4/commerce/",
+        "type": "OData",
+        "settings": {
+          "annotations": [],
+          "localUri": "localService/mainService/metadata.xml",
+          "odataVersion": "4.0"
+        }
+      }
+    },
+    "crossNavigation": {
+      "inbounds": {
+        "display-display": {
+          "semanticObject": "display",
+          "action": "display",
+          "title": "{{display-display.flpTitle}}",
+          "signature": {
+            "parameters": {},
+            "additionalParameters": "allowed"
+          }
+        }
+      }
+    }
+  },
+  "sap.ui": {
+    "technology": "UI5",
+    "icons": {
+      "icon": "",
+      "favIcon": "",
+      "phone": "",
+      "phone@2": "",
+      "tablet": "",
+      "tablet@2": ""
+    },
+    "deviceTypes": {
+      "desktop": true,
+      "tablet": true,
+      "phone": true
+    }
+  },
+  "sap.ui5": {
+    "flexEnabled": false,
+    "dependencies": {
+      "minUI5Version": "1.143.2",
+      "libs": {
+        "sap.m": {},
+        "sap.ui.core": {}
+      }
+    },
+    "contentDensities": {
+      "compact": true,
+      "cozy": true
+    },
+    "models": {
+      "i18n": {
+        "type": "sap.ui.model.resource.ResourceModel",
+        "settings": {
+          "bundleName": "ecommercehub.i18n.i18n"
+        }
+      },
+      "": {
+        "dataSource": "mainService",
+        "preload": true,
+        "settings": {
+          "operationMode": "Server",
+          "autoExpandSelect": true,
+          "earlyRequests": true
+        }
+      }
+    },
+    "resources": {
+      "css": [
+        {
+          "uri": "css/style.css"
+        }
+      ]
+    },
+    "routing": {
+      "config": {
+        "routerClass": "sap.m.routing.Router",
+        "controlAggregation": "pages",
+        "controlId": "app",
+        "transition": "slide",
+        "type": "View",
+        "viewType": "XML",
+        "path": "ecommercehub.view",
+        "async": true,
+        "viewPath": "ecommercehub.view"
+      },
+      "routes": [
+        {
+          "name": "RouteECommerceHub",
+          "pattern": ":?query:",
+          "target": [
+            "TargetECommerceHub"
+          ]
+        },        {
+          "name": "User",
+          "pattern": "User",
+          "target": "User"
+        },
+        {
+          "pattern": "Product/{productId}/{productType}",
+          "name": "ProductDisplay",
+          "target": "ProductDisplay"
+        },
+        {
+          "pattern": "ProductListing/{query}",
+          "name": "ProductListing",
+          "target": "ProductListing"
+        },
+        {
+          "pattern": "Cart/{customerCode}",
+          "name": "Cart",
+          "target": "Cart"
+        },
+        {
+          "pattern": "Checkout/{cartId}",
+          "name": "Checkout",
+          "target": "Checkout"
+        }
+
+      ],
+      "targets": {
+        "TargetECommerceHub": {
+          "id": "ECommerceHub",
+          "name": "ECommerceHub"
+        },        "User": {
+          "id": "User",
+          "name": "User"
+        },
+        "ProductDisplay": {
+          "name": "ProductDisplay"
+        },
+        "ProductListing": {
+          "name": "ProductListing"
+        },
+        "Cart": {
+          "name": "Cart"
+        },
+        "Checkout": {
+          "name": "Checkout"
+        }
+      }
+    },
+    "rootView": {
+      "viewName": "ecommercehub.view.App",
+      "type": "XML",
+      "id": "App",
+      "async": true
+    }
+  },
+  "sap.cloud": {
+    "public": true,
+    "service": "ecommercehub"
+  }
+}

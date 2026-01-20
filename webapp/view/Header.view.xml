@@ -1,0 +1,97 @@
+<mvc:View
+    controllerName="ecommercehub.controller.Header"
+    xmlns:mvc="sap.ui.core.mvc"
+    xmlns:tnt="sap.tnt"
+    xmlns="sap.m"
+>
+    <!-- <ScrollContainer
+                vertical="true"
+                height="100%"
+            > -->
+    <tnt:ToolHeader
+        id="shellLikeToolHeader"
+        class="sapUiTinyMarginTop"
+        design="Transparent"
+    >
+        <Button
+            visible="{ui>/showBack}"
+            press="onNavBack"
+            type="Back"
+        />
+        <Image
+            src="https://img.icons8.com/?id=42853"
+            decorative="false"
+            width="30px"
+            height="30px"
+            press="backToHome"
+        >
+            <layoutData>
+                <OverflowToolbarLayoutData priority="NeverOverflow" />
+            </layoutData>
+        </Image>
+        <Title
+            text="E-Commerce Hub"
+            wrapping="false"
+            id="HeaderTitle"
+            class="sapMTitle"
+        >
+            <layoutData>
+                <OverflowToolbarLayoutData priority="High" />
+            </layoutData>
+        </Title>
+        <Text
+            text="Modern E-Commerce Platform"
+            wrapping="false"
+            id="secondTitle"
+            class="appHeaderSubTitle"
+            visible="{= !${device>/isPhone} }"
+        >
+            <layoutData>
+                <OverflowToolbarLayoutData priority="Disappear" />
+            </layoutData>
+        </Text>
+        <ToolbarSpacer />
+        <SearchField
+            width="20rem"
+            id="searchField"
+            placeholder="Search for products, brands and more"
+            search="onSearch"
+            showSearchButton="false"
+            showRefreshButton="false"
+        >
+            <layoutData>
+                <OverflowToolbarLayoutData
+                    priority="Low"
+                    group="1"
+                />
+            </layoutData>
+        </SearchField>
+        <Button
+            visible="false"
+            icon="sap-icon://search"
+            type="Transparent"
+            id="searchButton"
+            tooltip="Search"
+        />
+        <Button
+            icon="sap-icon://cart"
+            type="Transparent"
+            press="toCart"
+        >
+            <layoutData>
+                <OverflowToolbarLayoutData priority="NeverOverflow" />
+            </layoutData>
+        </Button>
+        <tnt:ToolHeaderUtilitySeparator />
+        <Avatar
+            src="{CurrentUser>/avatar}"
+            displaySize="XS"
+            press="goToUserPage"
+        >
+            <layoutData>
+                <OverflowToolbarLayoutData priority="NeverOverflow" />
+            </layoutData>
+        </Avatar>
+    </tnt:ToolHeader>
+    <!-- </ScrollContainer> -->
+</mvc:View>

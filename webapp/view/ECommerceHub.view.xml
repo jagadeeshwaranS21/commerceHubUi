@@ -1,0 +1,118 @@
+<mvc:View
+    xmlns:core="sap.ui.core"
+    controllerName="ecommercehub.controller.ECommerceHub"
+    xmlns:mvc="sap.ui.core.mvc"
+    xmlns:tnt="sap.tnt"
+    xmlns="sap.m"
+    xmlns:grid="sap.ui.layout.cssgrid"
+    xmlns:f="sap.f"
+    xmlns:u="sap.ui.unified"
+>
+    <Page
+        enableScrolling="true"
+        showHeader="false"
+        backgroundDesign="Solid"
+    >
+        <mvc:XMLView viewName="ecommercehub.view.Header" />
+        <Carousel
+            id="offerCarousel"
+            width="100%"
+            height="60%"
+            loop="true"
+            pages="{/CarouselBanner}"
+            showPageIndicator="false"
+            backgroundDesign="Translucent"
+        >
+            <Image
+                src="{bannerUrl}"
+                width="100%"
+                height="90%"
+                decorative="false"
+            />
+        </Carousel>
+        <Image
+            id="bannerImage"
+            width="100%"
+            height="40%"
+            src="{OfferBanner>/bannerUrl}"
+        />
+        <HBox
+            justifyContent="Center"
+            class="sapUiSmallMargin"
+        >
+            <Title
+                text="Promoted Products"
+                titleStyle="H2"
+            />
+            <!-- <Input
+                width="300px"
+                placeholder="Search product"
+                showSuggestion="true"
+                suggestionItems="{
+                path: '/ProductVariants' }"
+            >
+                <suggestionItems>
+                    <core:Item
+                        key="{id}"
+                        text="{name}"
+                    />
+                </suggestionItems>
+            </Input> -->
+        </HBox>
+        <f:GridList
+            id="gridList"
+            items="{/PromotedProducts}"
+            class="sapUiResponsiveContentPadding sapUiSmallMarginBottom "
+        >
+            <f:customLayout>
+                <grid:GridBasicLayout
+                    gridTemplateColumns="repeat(auto-fit, minmax(16rem, 1fr))"
+                    gridGap="0.5rem"
+                />
+            </f:customLayout>
+
+            <f:items>
+                <f:GridListItem
+                    type="Active"
+                    press="selectProduct"
+                >
+                    <VBox class="sapUiSmallMargin productCard">
+                        <Image
+                            src="{imageUrl}"
+                            width="100%"
+                            height="160px"
+                            densityAware="false"
+                            class="sapUiTinyMarginBottom"
+                            visible="{= !!${imageUrl} }"
+                        />
+
+                        <Title
+                            text="{code}"
+                            wrapping="true"
+                            titleStyle="H4"
+                        />
+
+                        <Text
+                            text="{description}"
+                            wrapping="true"
+                            class="sapUiTinyMarginBottom"
+                        />
+
+                        <u:Currency
+                            value="{basePrice}"
+                            currency="{currency}"
+                            useSymbol="true"
+                        />
+                        <RatingIndicator
+                            maxValue="5"
+                            class="sapUiSmallMarginBottom"
+                            value="{averageRating}"
+                            editable="false"
+                        />
+                    </VBox>
+                </f:GridListItem>
+            </f:items>
+        </f:GridList>
+        <mvc:XMLView viewName="ecommercehub.view.Footer" />
+        </Page>
+</mvc:View>

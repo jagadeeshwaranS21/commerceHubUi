@@ -1,0 +1,67 @@
+<mvc:View
+    controllerName="ecommercehub.controller.User"
+    xmlns:mvc="sap.ui.core.mvc"
+    xmlns="sap.m"
+    xmlns:tnt="sap.tnt"
+>
+    <Page showHeader="false">
+        <ScrollContainer vertical="true">
+            <tnt:ToolHeader>
+                <Button
+                    type="Back"
+                    press="backToHome"
+                />
+                <Image
+                    src="https://static.vecteezy.com/system/resources/previews/011/107/377/original/ecommerce-3d-icon-illustration-png.png"
+                    decorative="false"
+                    width="60px"
+                    height="30px"
+                >
+                    <layoutData>
+                        <OverflowToolbarLayoutData priority="NeverOverflow" />
+                    </layoutData>
+                </Image>
+                <Title
+                    text="E-Commerce Hub"
+                    wrapping="false"
+                    class="sapMTitle"
+                >
+                    <layoutData>
+                        <OverflowToolbarLayoutData priority="Disappear" />
+                    </layoutData>
+                </Title>
+                <Text
+                    text="Modern E-Commerce Platform"
+                    wrapping="false"
+                    class="appHeaderSubTitle"
+                >
+                    <layoutData>
+                        <OverflowToolbarLayoutData priority="Disappear" />
+                    </layoutData>
+                </Text>
+                <ToolbarSpacer />
+                <tnt:ToolHeaderUtilitySeparator />
+            </tnt:ToolHeader>
+            <ObjectHeader
+                icon="{CurrentUser>/avatar}"
+                iconDensityAware="false"
+                iconAlt="{CurrentUser>/firstName}{CurrentUser>/lastName}"
+                imageShape="Circle"
+                responsive="true"
+                title="{CurrentUser>/firstName}{CurrentUser>/lastName}"
+                intro="{CurrentUser>/customerCode}"
+                class="sapUiResponsivePadding--header"
+            >
+                <ObjectAttribute
+                    title="Email address"
+                    text="{CurrentUser>/email}"
+                    active="true"
+                />
+                <ObjectAttribute
+                    title="Phone Number"
+                    text="{CurrentUser>/phoneNumber}"
+                />
+            </ObjectHeader>
+        </ScrollContainer>
+    </Page>
+</mvc:View>

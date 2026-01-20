@@ -1,0 +1,421 @@
+<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="4.0" xmlns:edmx="http://docs.oasis-open.org/odata/ns/edmx">
+    <edmx:Reference Uri="https://sap.github.io/odata-vocabularies/vocabularies/Common.xml">
+        <edmx:Include Alias="Common" Namespace="com.sap.vocabularies.Common.v1"/>
+    </edmx:Reference>
+    <edmx:Reference Uri="https://oasis-tcs.github.io/odata-vocabularies/vocabularies/Org.OData.Core.V1.xml">
+        <edmx:Include Alias="Core" Namespace="Org.OData.Core.V1"/>
+    </edmx:Reference>
+    <edmx:Reference Uri="https://oasis-tcs.github.io/odata-vocabularies/vocabularies/Org.OData.Validation.V1.xml">
+        <edmx:Include Alias="Validation" Namespace="Org.OData.Validation.V1"/>
+    </edmx:Reference>
+    <edmx:DataServices>
+        <Schema Namespace="CommerceService" xmlns="http://docs.oasis-open.org/odata/ns/edm">
+            <Annotation Term="Core.Links">
+                <Collection>
+                    <Record>
+                        <PropertyValue Property="rel" String="author"/>
+                        <PropertyValue Property="href" String="https://cap.cloud.sap"/>
+                    </Record>
+                </Collection>
+            </Annotation>
+            <EntityContainer Name="EntityContainer">
+                <EntitySet Name="Products" EntityType="CommerceService.Products">
+                    <NavigationPropertyBinding Path="categories" Target="ProductCategory"/>
+                    <NavigationPropertyBinding Path="variants" Target="ProductVariants"/>
+                </EntitySet>
+                <EntitySet Name="PromotedProducts" EntityType="CommerceService.PromotedProducts">
+                    <NavigationPropertyBinding Path="categories" Target="ProductCategory"/>
+                    <NavigationPropertyBinding Path="variants" Target="ProductVariants"/>
+                </EntitySet>
+                <EntitySet Name="Categories" EntityType="CommerceService.Categories">
+                    <NavigationPropertyBinding Path="parent" Target="Categories"/>
+                    <NavigationPropertyBinding Path="children" Target="Categories"/>
+                    <NavigationPropertyBinding Path="products" Target="ProductCategory"/>
+                </EntitySet>
+                <EntitySet Name="ProductVariants" EntityType="CommerceService.ProductVariants">
+                    <NavigationPropertyBinding Path="product" Target="Products"/>
+                    <NavigationPropertyBinding Path="stocks" Target="Stocks"/>
+                </EntitySet>
+                <EntitySet Name="Stocks" EntityType="CommerceService.Stocks">
+                    <NavigationPropertyBinding Path="variant" Target="ProductVariants"/>
+                    <NavigationPropertyBinding Path="warehouse" Target="Warehouses"/>
+                </EntitySet>
+                <EntitySet Name="Warehouses" EntityType="CommerceService.Warehouses">
+                    <NavigationPropertyBinding Path="stocks" Target="Stocks"/>
+                </EntitySet>
+                <EntitySet Name="Carts" EntityType="CommerceService.Carts">
+                    <NavigationPropertyBinding Path="items" Target="CartItems"/>
+                    <NavigationPropertyBinding Path="user" Target="Users"/>
+                </EntitySet>
+                <EntitySet Name="CartItems" EntityType="CommerceService.CartItems">
+                    <NavigationPropertyBinding Path="cart" Target="Carts"/>
+                    <NavigationPropertyBinding Path="variant" Target="ProductVariants"/>
+                </EntitySet>
+                <EntitySet Name="ProductCategory" EntityType="CommerceService.ProductCategory">
+                    <NavigationPropertyBinding Path="product" Target="Products"/>
+                    <NavigationPropertyBinding Path="category" Target="Categories"/>
+                </EntitySet>
+                <EntitySet Name="Users" EntityType="CommerceService.Users">
+                    <NavigationPropertyBinding Path="carts" Target="Carts"/>
+                </EntitySet>
+                <EntitySet Name="OfferBanner" EntityType="CommerceService.OfferBanner"/>
+                <EntitySet Name="CarouselBanner" EntityType="CommerceService.CarouselBanner"/>
+                <ActionImport Name="addToCart" Action="CommerceService.addToCart"/>
+                <ActionImport Name="checkout" Action="CommerceService.checkout"/>
+                <ActionImport Name="findLocation" Action="CommerceService.findLocation"/>
+            </EntityContainer>
+            <EntityType Name="Products">
+                <Key>
+                    <PropertyRef Name="ID"/>
+                </Key>
+                <Property Name="ID" Type="Edm.Guid" Nullable="false"/>
+                <Property Name="code" Type="Edm.String" MaxLength="50"/>
+                <Property Name="name" Type="Edm.String" MaxLength="255"/>
+                <Property Name="description" Type="Edm.String" MaxLength="1000"/>
+                <Property Name="brand" Type="Edm.String" MaxLength="100"/>
+                <Property Name="imageUrl" Type="Edm.String"/>
+                <Property Name="basePrice" Type="Edm.Decimal" Precision="13" Scale="2"/>
+                <NavigationProperty Name="categories" Type="Collection(CommerceService.ProductCategory)" Partner="product"/>
+                <Property Name="averageRating" Type="Edm.Double"/>
+                <NavigationProperty Name="variants" Type="Collection(CommerceService.ProductVariants)" Partner="product">
+                    <OnDelete Action="Cascade"/>
+                </NavigationProperty>
+                <Property Name="isActive" Type="Edm.Boolean" DefaultValue="true"/>
+                <Property Name="isPromoted" Type="Edm.Boolean" DefaultValue="true"/>
+                <Property Name="currency" Type="Edm.String" MaxLength="3" DefaultValue="USD"/>
+                <Property Name="createdAt" Type="Edm.DateTimeOffset" Precision="7"/>
+                <Property Name="updatedAt" Type="Edm.DateTimeOffset" Precision="7"/>
+            </EntityType>
+            <EntityType Name="PromotedProducts">
+                <Key>
+                    <PropertyRef Name="ID"/>
+                </Key>
+                <Property Name="ID" Type="Edm.Guid" Nullable="false"/>
+                <Property Name="code" Type="Edm.String" MaxLength="50"/>
+                <Property Name="name" Type="Edm.String" MaxLength="255"/>
+                <Property Name="description" Type="Edm.String" MaxLength="1000"/>
+                <Property Name="brand" Type="Edm.String" MaxLength="100"/>
+                <Property Name="imageUrl" Type="Edm.String"/>
+                <Property Name="basePrice" Type="Edm.Decimal" Precision="13" Scale="2"/>
+                <NavigationProperty Name="categories" Type="Collection(CommerceService.ProductCategory)"/>
+                <Property Name="averageRating" Type="Edm.Double"/>
+                <NavigationProperty Name="variants" Type="Collection(CommerceService.ProductVariants)">
+                    <OnDelete Action="Cascade"/>
+                </NavigationProperty>
+                <Property Name="isActive" Type="Edm.Boolean" DefaultValue="true"/>
+                <Property Name="isPromoted" Type="Edm.Boolean" DefaultValue="true"/>
+                <Property Name="currency" Type="Edm.String" MaxLength="3" DefaultValue="USD"/>
+                <Property Name="createdAt" Type="Edm.DateTimeOffset" Precision="7"/>
+                <Property Name="updatedAt" Type="Edm.DateTimeOffset" Precision="7"/>
+            </EntityType>
+            <EntityType Name="Categories">
+                <Key>
+                    <PropertyRef Name="ID"/>
+                </Key>
+                <Property Name="ID" Type="Edm.Guid" Nullable="false"/>
+                <Property Name="code" Type="Edm.String" MaxLength="50"/>
+                <Property Name="name" Type="Edm.String" MaxLength="255"/>
+                <Property Name="description" Type="Edm.String" MaxLength="500"/>
+                <NavigationProperty Name="parent" Type="CommerceService.Categories" Partner="children">
+                    <ReferentialConstraint Property="parent_ID" ReferencedProperty="ID"/>
+                </NavigationProperty>
+                <Property Name="parent_ID" Type="Edm.Guid"/>
+                <NavigationProperty Name="children" Type="Collection(CommerceService.Categories)" Partner="parent">
+                    <OnDelete Action="Cascade"/>
+                </NavigationProperty>
+                <NavigationProperty Name="products" Type="Collection(CommerceService.ProductCategory)" Partner="category"/>
+                <Property Name="isActive" Type="Edm.Boolean" DefaultValue="true"/>
+                <Property Name="createdAt" Type="Edm.DateTimeOffset" Precision="7"/>
+                <Property Name="updatedAt" Type="Edm.DateTimeOffset" Precision="7"/>
+            </EntityType>
+            <EntityType Name="ProductVariants">
+                <Key>
+                    <PropertyRef Name="ID"/>
+                </Key>
+                <Property Name="ID" Type="Edm.Guid" Nullable="false"/>
+                <Property Name="sku" Type="Edm.String" MaxLength="80"/>
+                <NavigationProperty Name="product" Type="CommerceService.Products">
+                    <ReferentialConstraint Property="product_ID" ReferencedProperty="ID"/>
+                </NavigationProperty>
+                <Property Name="product_ID" Type="Edm.Guid"/>
+                <Property Name="name" Type="Edm.String"/>
+                <Property Name="averageRating" Type="Edm.Double"/>
+                <Property Name="price" Type="Edm.Decimal" Precision="13" Scale="2"/>
+                <Property Name="currency" Type="Edm.String" MaxLength="3" DefaultValue="USD"/>
+                <Property Name="description" Type="Edm.String"/>
+                <Property Name="imageUrl" Type="Edm.String"/>
+                <NavigationProperty Name="stocks" Type="Collection(CommerceService.Stocks)" Partner="variant"/>
+                <Property Name="isActive" Type="Edm.Boolean" DefaultValue="true"/>
+                <Property Name="createdAt" Type="Edm.DateTimeOffset" Precision="7"/>
+                <Property Name="updatedAt" Type="Edm.DateTimeOffset" Precision="7"/>
+            </EntityType>
+            <EntityType Name="Stocks">
+                <Key>
+                    <PropertyRef Name="ID"/>
+                </Key>
+                <Property Name="ID" Type="Edm.Guid" Nullable="false"/>
+                <NavigationProperty Name="variant" Type="CommerceService.ProductVariants" Partner="stocks">
+                    <ReferentialConstraint Property="variant_ID" ReferencedProperty="ID"/>
+                </NavigationProperty>
+                <Property Name="variant_ID" Type="Edm.Guid"/>
+                <NavigationProperty Name="warehouse" Type="CommerceService.Warehouses" Partner="stocks">
+                    <ReferentialConstraint Property="warehouse_ID" ReferencedProperty="ID"/>
+                </NavigationProperty>
+                <Property Name="warehouse_ID" Type="Edm.Guid"/>
+                <Property Name="quantity" Type="Edm.Int32"/>
+                <Property Name="createdAt" Type="Edm.DateTimeOffset" Precision="7"/>
+                <Property Name="updatedAt" Type="Edm.DateTimeOffset" Precision="7"/>
+            </EntityType>
+            <EntityType Name="Warehouses">
+                <Key>
+                    <PropertyRef Name="ID"/>
+                </Key>
+                <Property Name="ID" Type="Edm.Guid" Nullable="false"/>
+                <Property Name="code" Type="Edm.String" MaxLength="50"/>
+                <Property Name="name" Type="Edm.String" MaxLength="255"/>
+                <Property Name="city" Type="Edm.String" MaxLength="100"/>
+                <Property Name="country" Type="Edm.String" MaxLength="100"/>
+                <NavigationProperty Name="stocks" Type="Collection(CommerceService.Stocks)" Partner="warehouse"/>
+                <Property Name="isActive" Type="Edm.Boolean" DefaultValue="true"/>
+                <Property Name="createdAt" Type="Edm.DateTimeOffset" Precision="7"/>
+                <Property Name="updatedAt" Type="Edm.DateTimeOffset" Precision="7"/>
+            </EntityType>
+            <EntityType Name="Carts">
+                <Key>
+                    <PropertyRef Name="ID"/>
+                </Key>
+                <Property Name="ID" Type="Edm.Guid" Nullable="false"/>
+                <Property Name="cartCode" Type="Edm.String" MaxLength="50"/>
+                <NavigationProperty Name="items" Type="Collection(CommerceService.CartItems)" Partner="cart">
+                    <OnDelete Action="Cascade"/>
+                </NavigationProperty>
+                <Property Name="status" Type="Edm.String" DefaultValue="ACTIVE"/>
+                <Property Name="subtotal" Type="Edm.Decimal" Precision="15" Scale="2"/>
+                <Property Name="taxAmount" Type="Edm.Decimal" Precision="15" Scale="2"/>
+                <Property Name="shippingFee" Type="Edm.Decimal" Precision="15" Scale="2"/>
+                <Property Name="grandTotal" Type="Edm.Decimal" Precision="15" Scale="2"/>
+                <NavigationProperty Name="user" Type="CommerceService.Users" Partner="carts">
+                    <ReferentialConstraint Property="user_ID" ReferencedProperty="ID"/>
+                </NavigationProperty>
+                <Property Name="user_ID" Type="Edm.Guid"/>
+                <Property Name="expiresAt" Type="Edm.DateTimeOffset" Precision="7"/>
+                <Property Name="createdAt" Type="Edm.DateTimeOffset" Precision="7"/>
+                <Property Name="updatedAt" Type="Edm.DateTimeOffset" Precision="7"/>
+            </EntityType>
+            <EntityType Name="CartItems">
+                <Key>
+                    <PropertyRef Name="ID"/>
+                </Key>
+                <Property Name="ID" Type="Edm.Guid" Nullable="false"/>
+                <NavigationProperty Name="cart" Type="CommerceService.Carts" Partner="items">
+                    <ReferentialConstraint Property="cart_ID" ReferencedProperty="ID"/>
+                </NavigationProperty>
+                <Property Name="cart_ID" Type="Edm.Guid"/>
+                <NavigationProperty Name="variant" Type="CommerceService.ProductVariants">
+                    <ReferentialConstraint Property="variant_ID" ReferencedProperty="ID"/>
+                </NavigationProperty>
+                <Property Name="variant_ID" Type="Edm.Guid"/>
+                <Property Name="quantity" Type="Edm.Int32"/>
+                <Property Name="unitPrice" Type="Edm.Decimal" Precision="13" Scale="2"/>
+                <Property Name="totalPrice" Type="Edm.Decimal" Precision="13" Scale="2"/>
+                <Property Name="currency" Type="Edm.String" MaxLength="3" DefaultValue="USD"/>
+                <Property Name="createdAt" Type="Edm.DateTimeOffset" Precision="7"/>
+                <Property Name="updatedAt" Type="Edm.DateTimeOffset" Precision="7"/>
+            </EntityType>
+            <EntityType Name="ProductCategory">
+                <Key>
+                    <PropertyRef Name="ID"/>
+                </Key>
+                <Property Name="ID" Type="Edm.Guid" Nullable="false"/>
+                <NavigationProperty Name="product" Type="CommerceService.Products">
+                    <ReferentialConstraint Property="product_ID" ReferencedProperty="ID"/>
+                </NavigationProperty>
+                <Property Name="product_ID" Type="Edm.Guid"/>
+                <NavigationProperty Name="category" Type="CommerceService.Categories" Partner="products">
+                    <ReferentialConstraint Property="category_ID" ReferencedProperty="ID"/>
+                </NavigationProperty>
+                <Property Name="category_ID" Type="Edm.Guid"/>
+            </EntityType>
+            <EntityType Name="Users">
+                <Key>
+                    <PropertyRef Name="ID"/>
+                </Key>
+                <Property Name="ID" Type="Edm.Guid" Nullable="false"/>
+                <Property Name="customerCode" Type="Edm.String"/>
+                <Property Name="email" Type="Edm.String" MaxLength="255"/>
+                <Property Name="phoneNumber" Type="Edm.String" MaxLength="20"/>
+                <Property Name="avatar" Type="Edm.String"/>
+                <Property Name="firstName" Type="Edm.String" MaxLength="100"/>
+                <Property Name="lastName" Type="Edm.String" MaxLength="100"/>
+                <Property Name="password" Type="Edm.String" MaxLength="255"/>
+                <Property Name="isActive" Type="Edm.Boolean" DefaultValue="true"/>
+                <NavigationProperty Name="carts" Type="Collection(CommerceService.Carts)" Partner="user"/>
+                <Property Name="createdAt" Type="Edm.DateTimeOffset" Precision="7"/>
+                <Property Name="updatedAt" Type="Edm.DateTimeOffset" Precision="7"/>
+            </EntityType>
+            <EntityType Name="OfferBanner">
+                <Key>
+                    <PropertyRef Name="ID"/>
+                </Key>
+                <Property Name="ID" Type="Edm.Guid" Nullable="false"/>
+                <Property Name="bannerUrl" Type="Edm.String"/>
+                <Property Name="isCarousel" Type="Edm.Boolean" DefaultValue="true"/>
+            </EntityType>
+            <EntityType Name="CarouselBanner">
+                <Key>
+                    <PropertyRef Name="ID"/>
+                </Key>
+                <Property Name="ID" Type="Edm.Guid" Nullable="false"/>
+                <Property Name="bannerUrl" Type="Edm.String"/>
+                <Property Name="isCarousel" Type="Edm.Boolean" DefaultValue="true"/>
+            </EntityType>
+            <ComplexType Name="LocationRequest">
+                <Property Name="street" Type="Edm.String"/>
+                <Property Name="city" Type="Edm.String"/>
+                <Property Name="state" Type="Edm.String"/>
+                <Property Name="country" Type="Edm.String"/>
+                <Property Name="postalcode" Type="Edm.String"/>
+                <Property Name="amenity" Type="Edm.String"/>
+            </ComplexType>
+            <Action Name="addToCart" IsBound="false">
+                <Parameter Name="productCode" Type="Edm.String"/>
+                <Parameter Name="quantity" Type="Edm.Int32"/>
+                <Parameter Name="userID" Type="Edm.String"/>
+            </Action>
+            <Action Name="checkout" IsBound="false">
+                <Parameter Name="userID" Type="Edm.String"/>
+            </Action>
+            <Action Name="findLocation" IsBound="false">
+                <Parameter Name="address" Type="CommerceService.LocationRequest"/>
+                <ReturnType Type="Collection(Edm.String)" Nullable="true"/>
+            </Action>
+            <Annotations Target="CommerceService.Products/ID">
+                <Annotation Term="Core.ComputedDefaultValue" Bool="true"/>
+            </Annotations>
+            <Annotations Target="CommerceService.Products/averageRating">
+                <Annotation Term="Validation.Minimum" Int="0"/>
+                <Annotation Term="Validation.Maximum" Int="5"/>
+            </Annotations>
+            <Annotations Target="CommerceService.Products/createdAt">
+                <Annotation Term="Core.Computed" Bool="true"/>
+            </Annotations>
+            <Annotations Target="CommerceService.Products/updatedAt">
+                <Annotation Term="Core.Computed" Bool="true"/>
+            </Annotations>
+            <Annotations Target="CommerceService.PromotedProducts/ID">
+                <Annotation Term="Core.ComputedDefaultValue" Bool="true"/>
+            </Annotations>
+            <Annotations Target="CommerceService.PromotedProducts/averageRating">
+                <Annotation Term="Validation.Minimum" Int="0"/>
+                <Annotation Term="Validation.Maximum" Int="5"/>
+            </Annotations>
+            <Annotations Target="CommerceService.PromotedProducts/createdAt">
+                <Annotation Term="Core.Computed" Bool="true"/>
+            </Annotations>
+            <Annotations Target="CommerceService.PromotedProducts/updatedAt">
+                <Annotation Term="Core.Computed" Bool="true"/>
+            </Annotations>
+            <Annotations Target="CommerceService.Categories/ID">
+                <Annotation Term="Core.ComputedDefaultValue" Bool="true"/>
+            </Annotations>
+            <Annotations Target="CommerceService.Categories/createdAt">
+                <Annotation Term="Core.Computed" Bool="true"/>
+            </Annotations>
+            <Annotations Target="CommerceService.Categories/updatedAt">
+                <Annotation Term="Core.Computed" Bool="true"/>
+            </Annotations>
+            <Annotations Target="CommerceService.ProductVariants/ID">
+                <Annotation Term="Core.ComputedDefaultValue" Bool="true"/>
+            </Annotations>
+            <Annotations Target="CommerceService.ProductVariants/averageRating">
+                <Annotation Term="Validation.Minimum" Int="0"/>
+                <Annotation Term="Validation.Maximum" Int="5"/>
+            </Annotations>
+            <Annotations Target="CommerceService.ProductVariants/createdAt">
+                <Annotation Term="Core.Computed" Bool="true"/>
+            </Annotations>
+            <Annotations Target="CommerceService.ProductVariants/updatedAt">
+                <Annotation Term="Core.Computed" Bool="true"/>
+            </Annotations>
+            <Annotations Target="CommerceService.Stocks/ID">
+                <Annotation Term="Core.ComputedDefaultValue" Bool="true"/>
+            </Annotations>
+            <Annotations Target="CommerceService.Stocks/createdAt">
+                <Annotation Term="Core.Computed" Bool="true"/>
+            </Annotations>
+            <Annotations Target="CommerceService.Stocks/updatedAt">
+                <Annotation Term="Core.Computed" Bool="true"/>
+            </Annotations>
+            <Annotations Target="CommerceService.Warehouses/ID">
+                <Annotation Term="Core.ComputedDefaultValue" Bool="true"/>
+            </Annotations>
+            <Annotations Target="CommerceService.Warehouses/createdAt">
+                <Annotation Term="Core.Computed" Bool="true"/>
+            </Annotations>
+            <Annotations Target="CommerceService.Warehouses/updatedAt">
+                <Annotation Term="Core.Computed" Bool="true"/>
+            </Annotations>
+            <Annotations Target="CommerceService.Carts/ID">
+                <Annotation Term="Core.ComputedDefaultValue" Bool="true"/>
+            </Annotations>
+            <Annotations Target="CommerceService.Carts/status">
+                <Annotation Term="Validation.AllowedValues">
+                    <Collection>
+                        <Record Type="Validation.AllowedValue">
+                            <Annotation Term="Core.SymbolicName" String="ACTIVE"/>
+                            <PropertyValue Property="Value" String="ACTIVE"/>
+                        </Record>
+                        <Record Type="Validation.AllowedValue">
+                            <Annotation Term="Core.SymbolicName" String="CHECKED_OUT"/>
+                            <PropertyValue Property="Value" String="CHECKED_OUT"/>
+                        </Record>
+                        <Record Type="Validation.AllowedValue">
+                            <Annotation Term="Core.SymbolicName" String="ABANDONED"/>
+                            <PropertyValue Property="Value" String="ABANDONED"/>
+                        </Record>
+                    </Collection>
+                </Annotation>
+            </Annotations>
+            <Annotations Target="CommerceService.Carts/grandTotal">
+                <Annotation Term="Core.Computed" Bool="true"/>
+            </Annotations>
+            <Annotations Target="CommerceService.Carts/createdAt">
+                <Annotation Term="Core.Computed" Bool="true"/>
+            </Annotations>
+            <Annotations Target="CommerceService.Carts/updatedAt">
+                <Annotation Term="Core.Computed" Bool="true"/>
+            </Annotations>
+            <Annotations Target="CommerceService.CartItems/ID">
+                <Annotation Term="Core.ComputedDefaultValue" Bool="true"/>
+            </Annotations>
+            <Annotations Target="CommerceService.CartItems/totalPrice">
+                <Annotation Term="Core.Computed" Bool="true"/>
+            </Annotations>
+            <Annotations Target="CommerceService.CartItems/createdAt">
+                <Annotation Term="Core.Computed" Bool="true"/>
+            </Annotations>
+            <Annotations Target="CommerceService.CartItems/updatedAt">
+                <Annotation Term="Core.Computed" Bool="true"/>
+            </Annotations>
+            <Annotations Target="CommerceService.ProductCategory/ID">
+                <Annotation Term="Core.ComputedDefaultValue" Bool="true"/>
+            </Annotations>
+            <Annotations Target="CommerceService.Users/ID">
+                <Annotation Term="Core.ComputedDefaultValue" Bool="true"/>
+            </Annotations>
+            <Annotations Target="CommerceService.Users/createdAt">
+                <Annotation Term="Core.Computed" Bool="true"/>
+            </Annotations>
+            <Annotations Target="CommerceService.Users/updatedAt">
+                <Annotation Term="Core.Computed" Bool="true"/>
+            </Annotations>
+            <Annotations Target="CommerceService.OfferBanner/ID">
+                <Annotation Term="Core.ComputedDefaultValue" Bool="true"/>
+            </Annotations>
+            <Annotations Target="CommerceService.CarouselBanner/ID">
+                <Annotation Term="Core.ComputedDefaultValue" Bool="true"/>
+            </Annotations>
+        </Schema>
+    </edmx:DataServices>
+</edmx:Edmx>

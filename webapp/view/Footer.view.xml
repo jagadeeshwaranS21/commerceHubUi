@@ -1,0 +1,36 @@
+<mvc:View
+    controllerName="ecommercehub.controller.Footer"
+    xmlns:mvc="sap.ui.core.mvc"
+    xmlns="sap.m"
+    xmlns:tnt="sap.tnt"
+>
+    <Page showHeader="false" >
+        <footer>
+            <OverflowToolbar>
+                <Text text="© 2026 EcommerceHub. All rights reserved." />
+
+                <ToolbarSpacer />
+
+                <Link
+                    text="Help Center"
+                    press="onHelp"
+                />
+                <Text text="|" />
+                <Link
+                    text="Returns"
+                    press="onReturns"
+                />
+                <Text text="|" />
+                <Link
+                    text="Privacy Policy"
+                    press="onPrivacy"
+                />
+                <Text text="|" />
+                <Link
+                    text="Terms of Use"
+                    press="onTerms"
+                />
+            </OverflowToolbar>
+        </footer>
+    </Page>
+</mvc:View>

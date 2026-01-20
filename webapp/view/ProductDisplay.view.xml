@@ -1,0 +1,122 @@
+<mvc:View
+    controllerName="ecommercehub.controller.ProductDisplay"
+    displayBlock="true"
+    xmlns:mvc="sap.ui.core.mvc"
+    xmlns:tnt="sap.tnt"
+    xmlns:core="sap.ui.core"
+    xmlns="sap.m"
+>
+    <Page showHeader="false">
+        <mvc:XMLView viewName="ecommercehub.view.Header" />
+
+        <IconTabBar items="{variants>/}">
+            <items>
+                <IconTabFilter
+                    text="{variants>sku}"
+                    key="{variants>ID}"
+                >
+                    <HBox
+                        wrap="Wrap"
+                        width="100%"
+                        alignItems="Start"
+                        class="sapUiTinyMargin"
+                    >
+                        <Image
+                            src="{variants>imageUrl}"
+                            width="40rem"
+                            height="30rem"
+                            densityAware="false"
+                            class="sapUiSmallMarginEnd"
+                        >
+                            <detailBox>
+                                <LightBox>
+                                    <LightBoxItem
+                                        imageSrc="{variants>imageUrl}"
+                                        alt="{variants>name}"
+                                        title="{variants>name}"
+                                        subtitle="{variants>description}"
+                                    />
+                                </LightBox>
+                            </detailBox>
+                        </Image>
+
+                        <VBox
+                            width="40%"
+                            class="sapUiLargeMarginTop"
+                        >
+                            <Title
+                                text="{variants>name}"
+                                wrapping="true"
+                                class="sapUiSmallMarginBottom"
+                                titleStyle="H1"
+                            />
+
+                            <Text
+                                text="{variants>description}"
+                                wrapping="true"
+                                class="sapUiSmallMarginBottom"
+                            />
+                            <ObjectNumber
+                                number="{variants>price}"
+                                unit="{variants>currency}"
+                                emphasized="true"
+                                class="sapUiSmallMarginBottom"
+                                state="Success"
+                            />
+
+                            <ObjectNumber
+                                number="{
+                                    path: 'variants>stocks',
+                                    formatter: '.formatter.totalStockQuantity'
+                                }"
+                                emphasized="true"
+                                class="sapUiSmallMarginBottom"
+                                state="{
+                                    path:'variants>stocks',
+                                    formatter:'.formatter.stockState'
+                                }"
+                            />
+                            <RatingIndicator
+                                maxValue="5"
+                                class="sapUiSmallMarginBottom"
+                                value="{variants>averageRating}"
+                                iconSize="32px"
+                                editable="false"
+                            />
+                            <StepInput
+                                id="qtyInput"
+                                textAlign="Center"
+                                width="5rem"
+                                value="{quantity>/quantity}"
+                                min="1"
+                            />
+                            <Button
+                                icon="sap-icon://cart"
+                                text="Add To Cart"
+                                type="Emphasized"
+                                class="sapUiSmallMarginBottom"
+                                width="12rem"
+                                press="addToCart"
+                                enabled="{
+                                    path: 'variants>stocks',
+                                    formatter: '.formatter.isAddToCartEnabled'
+                                }"
+                            />
+                            <Button
+                                icon="sap-icon://target-group"
+                                text="Buy Now"
+                                type="Critical"
+                                class="sapUiSmallMarginBottom"
+                                width="12rem"
+                            />
+                        </VBox>
+                    </HBox>
+                    <FeedInput
+                        icon="{CurrentUser>/avatar}"
+                        class="sapUiSmallMarginBottom"
+                    />
+                </IconTabFilter>
+            </items>
+        </IconTabBar>
+    </Page>
+</mvc:View>

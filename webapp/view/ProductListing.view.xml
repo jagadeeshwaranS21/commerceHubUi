@@ -1,0 +1,90 @@
+<mvc:View
+    controllerName="ecommercehub.controller.ProductListing"
+    xmlns:mvc="sap.ui.core.mvc"
+    xmlns:tnt="sap.tnt"
+    xmlns="sap.m"
+    xmlns:grid="sap.ui.layout.cssgrid"
+    xmlns:f="sap.f"
+    xmlns:u="sap.ui.unified"
+>
+    <Page
+        showHeader="false"
+        enableScrolling="true"
+    >
+        <mvc:XMLView viewName="ecommercehub.view.Header" />
+        <VBox
+            class="sapUiMediumMarginBegin sapUiSmallMarginTop sapUiSmallMarginBottom"
+        >
+            <Title text="Search Result" />
+            <Text text="{view>/searchQuery}" />
+        </VBox>
+        <List
+            id="productList"
+            items="{/ProductVariants}"
+            growing="true"
+            growingScrollToLoad="true"
+            noDataText="No products found"
+        >
+            <items>
+                <CustomListItem
+                    type="Active"
+                    press="selectProduct"
+                >
+                    <HBox
+                        width="100%"
+                        class="sapUiSmallMargin"
+                        alignItems="Center"
+                    >
+                        <Image
+                            src="{imageUrl}"
+                            width="120px"
+                            height="120px"
+                            class="sapUiSmallMarginEnd"
+                        />
+
+                        <VBox width="100%">
+                            <Title
+                                text="{name}"
+                                wrapping="true"
+                            />
+                            <Text
+                                text="{description}"
+                                wrapping="true"
+                            />
+                            <RatingIndicator
+                                maxValue="5"
+                                class="sapUiSmallMarginBottom"
+                                value="{averageRating}"
+                                editable="false"
+                            />
+                            <ObjectNumber
+                                number="{price}"
+                                unit="{currency}"
+                                emphasized="true"
+                                state="Success"
+                                class="sapUiSmallMarginEnd"
+                            />
+                        </VBox>
+                        <VBox>
+                            <Button
+                                icon="sap-icon://cart"
+                                text="Add To Cart"
+                                type="Emphasized"
+                                class="sapUiTinyMarginBottom"
+                                width="8rem"
+                                press="addToCart"
+                            />
+                            <Button
+                                icon="sap-icon://target-group"
+                                text="Buy Now"
+                                type="Critical"
+                                class="sapUiTinyMarginBottom sapUiMediumMarginEnd"
+                                width="8rem"
+                            />
+                        </VBox>
+                    </HBox>
+                </CustomListItem>
+            </items>
+        </List>
+    </Page>
+</mvc:View>

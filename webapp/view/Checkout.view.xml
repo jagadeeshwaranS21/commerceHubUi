@@ -1,0 +1,241 @@
+<mvc:View
+    controllerName="ecommercehub.controller.Checkout"
+    xmlns:mvc="sap.ui.core.mvc"
+    xmlns="sap.m"
+    xmlns:tnt="sap.tnt"
+    xmlns:core="sap.ui.core"
+    xmlns:layout="sap.ui.layout"
+    xmlns:form="sap.ui.layout.form"
+    xmlns:gm="sap.ui.geomap"
+    xmlns:f="sap.f"
+>
+    <mvc:XMLView viewName="ecommercehub.view.Header" />
+    <NavContainer>
+        <pages>
+            <Page showHeader="false">
+                <content>
+                    <Wizard id="checkoutWizard">
+                        <WizardStep
+                            id="DeliveryStep"
+                            title="Delivery Address"
+                            nextStep="PaymentStep"
+                            activate="onDeliveryStepActivate"
+                            icon="sap-icon://home"
+                        >
+                            <VBox
+                                width="100%"
+                                class="sapUiSmallMargin"
+                            >
+                                <HBox
+                                    width="100%"
+                                    justifyContent="SpaceBetween"
+                                >
+                                    <VBox width="45%">
+                                        <form:SimpleForm
+                                            editable="true"
+                                            layout="ResponsiveGridLayout"
+                                            labelSpanXL="4"
+                                            labelSpanL="4"
+                                            labelSpanM="4"
+                                            labelSpanS="12"
+                                            columnsXL="1"
+                                            columnsL="1"
+                                            columnsM="1"
+                                        >
+                                            <Label text="Street" />
+                                            <Input
+                                                width="100%"
+                                                value="{view>/delivery/street}"
+                                            />
+
+                                            <Label text="City" />
+                                            <Input
+                                                width="100%"
+                                                value="{view>/delivery/city}"
+                                            />
+
+                                            <Label text="State" />
+                                            <Input
+                                                width="100%"
+                                                value="{view>/delivery/state}"
+                                            />
+
+                                            <Label text="Country" />
+                                            <Input
+                                                width="100%"
+                                                value="{view>/delivery/country}"
+                                            />
+
+                                            <Label text="Postal Code" />
+                                            <Input
+                                                width="100%"
+                                                value="{view>/delivery/postalcode}"
+                                            />
+                                        </form:SimpleForm>
+
+                                        <Button
+                                            press="checkAddress"
+                                            text="Check Address"
+                                            class="sapUiSmallMarginTop"
+                                        />
+                                    </VBox>
+
+                                    <VBox width="50%">
+                                        <Title
+                                            text="Suggested Locations"
+                                            level="H4"
+                                        />
+
+                                        <List
+                                            id="locationList"
+                                            items="{view>/locationResults}"
+                                            mode="SingleSelectMaster"
+                                            selectionChange="onLocationSelectionChange"
+                                            class="sapUiSmallMarginTop"
+                                        >
+                                            <StandardListItem
+                                                title="{view>display_name}"
+                                                description="Lat: {view>lat}, Lon: {view>lon}"
+                                                type="Active"
+                                            />
+                                        </List>
+                                    </VBox>
+                                </HBox>
+
+                                <gm:Geomap
+                                    id="deliveryMap"
+                                    width="100%"
+                                    minZoom="10"
+                                    height="300px"
+                                    class="sapUiSmallMarginTop"
+                                >
+                                    <gm:mapControls>
+                                        <gm:GeomapProvider
+                                            id="mapProvider"
+                                            styleUrl="https://{a-c}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+                                        />
+                                        <gm:GeomapNavigationControl />
+                                        <gm:GeomapScaleControl
+                                            position="BottomLeft"
+                                        />
+                                    </gm:mapControls>
+
+                                    <gm:items>
+                                        <gm:GeomapSpot
+                                            lat="{view>/map/lat}"
+                                            lng="{view>/map/lng}"
+                                            color="black"
+                                            tooltip="Delivery Location"
+                                            click="spotClick"
+                                        />
+                                    </gm:items>
+                                </gm:Geomap>
+                            </VBox>
+                        </WizardStep>
+                        <WizardStep
+                            id="PaymentStep"
+                            title="Payment Method"
+                            nextStep="ConfirmStep"
+                            icon="sap-icon://money-bills"
+                        >
+                            <VBox
+                                width="100%"
+                                alignItems="Center"
+                            >
+                                <!-- Payment Method Selection -->
+                                <SegmentedButton selectedKey="{view>/paymentMethod}">
+                                    <items>
+                                        <SegmentedButtonItem
+                                            key="CARD"
+                                            text="Credit Card"
+                                            icon="sap-icon://credit-card"
+                                        />
+                                        <SegmentedButtonItem
+                                            key="COD"
+                                            text="Cash on Delivery"
+                                            icon="sap-icon://money-bills"
+                                        />
+                                    </items>
+                                </SegmentedButton>
+
+                                <!-- Credit Card Fields (Only for CARD) -->
+                                <VBox
+                                    width="60%"
+                                    visible="{= ${view>/paymentMethod} === 'CARD' }"
+                                    class="sapUiSmallMarginTop"
+                                >
+                                    <Input
+                                        placeholder="Card Number"
+                                        value="{view>/card/number}"
+                                        type="Number"
+                                    />
+
+                                    <Input
+                                        placeholder="Card Holder Name"
+                                        value="{view>/card/name}"
+                                    />
+
+                                    <HBox
+                                        width="100%"
+                                        justifyContent="SpaceBetween"
+                                    >
+                                        <Input
+                                            placeholder="MM/YY"
+                                            value="{view>/card/expiry}"
+                                            width="48%"
+                                        />
+                                        <Input
+                                            placeholder="CVV"
+                                            value="{view>/card/cvv}"
+                                            type="Password"
+                                            width="48%"
+                                        />
+                                    </HBox>
+                                </VBox>
+
+                                <!-- COD Message -->
+                                <Text
+                                    text="Cash on Delivery selected. No payment details required."
+                                    visible="{= ${view>/paymentMethod} === 'COD' }"
+                                    class="sapUiSmallMarginTop"
+                                />
+                            </VBox>
+                        </WizardStep>
+
+                        <WizardStep
+                            id="ConfirmStep"
+                            title="Confirm Order"
+                            icon="sap-icon://accept"
+                        >
+                            <ObjectHeader
+                                title="Order Summary"
+                                number="{/totalAmount}"
+                                numberUnit="EUR"
+                            >
+                                <attributes>
+                                    <ObjectAttribute text="Delivery Address" />
+                                    <ObjectAttribute
+                                        text="{/delivery/address}, {/delivery/city}"
+                                    />
+                                    <ObjectAttribute text="Payment Method" />
+                                    <ObjectAttribute text="{/paymentMethod}" />
+                                </attributes>
+                            </ObjectHeader>
+                        </WizardStep>
+                    </Wizard>
+                </content>
+
+                <footer>
+                    <OverflowToolbar>
+                        <ToolbarSpacer />
+                        <Button
+                            text="Place Order"
+                            type="Accept"
+                            press="onPlaceOrder"
+                        />
+                    </OverflowToolbar>
+                </footer>
+            </Page>
+        </pages>
+    </NavContainer>
+</mvc:View>
