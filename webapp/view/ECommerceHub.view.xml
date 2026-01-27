@@ -30,6 +30,7 @@
                 decorative="false"
             />
         </Carousel>
+
         <Image
             id="bannerImage"
             width="100%"
@@ -114,5 +115,5 @@
             </f:items>
         </f:GridList>
         <mvc:XMLView viewName="ecommercehub.view.Footer" />
-        </Page>
+    </Page>
 </mvc:View>

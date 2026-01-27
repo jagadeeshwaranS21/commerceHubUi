@@ -25,7 +25,7 @@
                 <Panel headerText="{cart>/cartCode}">
                     <Table
                         id="cartItemTable"
-                        items="{cart>/items}"
+                        items="{path:'cart>/items'}"
                     >
                         <columns>
                             <Column width="12em">

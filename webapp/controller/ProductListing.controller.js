@@ -18,14 +18,12 @@ sap.ui.define([
             const oRouter = this.getOwnerComponent().getRouter();
             oRouter.getRoute("ProductListing").attachPatternMatched(this._onRouteMatched, this);
         },
-
         _onRouteMatched(oEvent) {
             const sQuery = decodeURIComponent(
                 oEvent.getParameter("arguments").query
             );
             this._loadProducts(sQuery);
         },
-
         _loadProducts(sQuery) {
             this.getView()
                 .getModel("view")

@@ -2,7 +2,6 @@ sap.ui.define([
     "sap/ui/core/mvc/Controller",
     "sap/m/MessageToast",
     "sap/ui/model/json/JSONModel",
-    "sap/ui/core/Messaging",
     "sap/m/Popover",
     "sap/m/List",
     "sap/m/StandardListItem"
@@ -10,7 +9,6 @@ sap.ui.define([
     Controller,
     MessageToast,
     JSONModel,
-    Messaging,
     Popover,
     List,
     StandardListItem
@@ -44,8 +42,6 @@ sap.ui.define([
 
             this.getView().setModel(oViewModel, "view");
 
-            Messaging.registerObject(this.getView(), true);
-
             const oProvider = this.byId("mapProvider");
             const osm = sap.ui.require.toUrl("ecommercehub/model/osm.json");
             setTimeout(() => {
@@ -56,9 +52,7 @@ sap.ui.define([
             const oItem = oEvent.getParameter("listItem");
             const oLocation = oItem.getBindingContext("view").getObject();
             this._updateMap(oLocation);
-        }
-        ,
-
+        },
         checkAddress() {
             const oODataModel = this.getOwnerComponent().getModel();
             const oViewModel = this.getView().getModel("view");

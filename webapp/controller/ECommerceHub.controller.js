@@ -14,7 +14,7 @@ sap.ui.define([
             this.getBannerImages();
             this._startCarouselAutoSlide();
             this.getOfferBanner();
-        }, 
+        },
         getOfferBanner() {
             const oModel = this.getOwnerComponent().getModel();
 

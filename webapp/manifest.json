@@ -112,7 +112,7 @@
           "target": [
             "TargetECommerceHub"
           ]
-        },        {
+        },{
           "name": "User",
           "pattern": "User",
           "target": "User"

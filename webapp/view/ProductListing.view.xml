@@ -21,6 +21,7 @@
         <List
             id="productList"
             items="{/ProductVariants}"
+            
             growing="true"
             growingScrollToLoad="true"
             noDataText="No products found"
