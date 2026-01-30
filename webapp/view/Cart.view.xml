@@ -12,11 +12,39 @@
         showHeader="false"
     >
         <mvc:XMLView viewName="ecommercehub.view.Header" />
+        <VBox
+            width="100%"
+            height="100%"
+            alignItems="Center"
+            justifyContent="Center"
+            visible="{= ${cart>/items}.length === 0 }"
+            class="sapUiLargeMarginTop"
+        >
+            <!-- <Icon
+                src="sap-icon://cart"
+                size="4rem"
+                class="sapUiSmallMarginBottom"
+            /> -->
+            <Title
+                text="Your cart is empty"
+                level="H3"
+            />
+            <Text
+                text="Looks like you haven’t added anything to your cart yet."
+            />
+            <Button
+                text="Continue Shopping"
+                class="sapUiSmallMarginTop"
+                press="onContinueShopping"
+            />
+        </VBox>
+
         <HBox
             width="100%"
             alignItems="Start"
             justifyContent="SpaceBetween"
             class="sapUiTinyMargin"
+            visible="{= ${cart>/items}.length > 0 }"
         >
             <VBox
                 width="70%"
@@ -136,9 +164,6 @@
                     </VBox>
                 </Panel>
             </VBox>
-            
         </HBox>
-
-
     </Page>
 </mvc:View>

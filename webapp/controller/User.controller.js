@@ -12,7 +12,7 @@ sap.ui.define([
         onInit() {
             const oModel = this.getOwnerComponent().getModel('CurrentUser');
         },backToHome : function () {
-			this.getOwnerComponent().getTargets().display("TargetECommerceHub");
+            this.getOwnerComponent().getTargets().display("TargetECommerceHub");
 		}
     });
 });

@@ -47,8 +47,8 @@ sap.ui.define([
 
                     const aCartItems = oCart.items;
 
-                    this.getView().setModel(
-                        new sap.ui.model.json.JSONModel(oCart),
+                    this.getOwnerComponent().setModel(
+                        new JSONModel(oCart),
                         "cart"
                     );
                     console.log("Cart:", oCart);
@@ -56,13 +56,17 @@ sap.ui.define([
                 })
                 .catch(console.error);
         }, onQuantityChange() {
-            const oModel = this.getView().getModel("cart");
+            const oModel = this.getOwnerComponent().getModel("cart");
             console.log("Model type:", oModel.getMetadata().getName());
         }, checkout() {
-            const oModel = this.getView().getModel("cart");
+            const oModel = this.getOwnerComponent().getModel("cart");
             const cart = oModel.getData();
             console.log(cart.ID);
-            this.getOwnerComponent().getRouter().navTo("Checkout",{cartId:cart.ID});
+            this.getOwnerComponent().getRouter().navTo("Checkout", { cartId: cart.ID });
+        }, onContinueShopping() {
+            const router = this.getOwnerComponent().getRouter();
+            router.navTo("RouteECommerceHub", {}, true);
         }
+
     });
 });

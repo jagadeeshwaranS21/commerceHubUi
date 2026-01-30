@@ -39,7 +39,7 @@ sap.ui.define([
                     cvv: ""
                 }
             });
-
+            this.userData = this.getOwnerComponent().getModel("CurrentUser").getData()
             this.getView().setModel(oViewModel, "view");
 
             const oProvider = this.byId("mapProvider");
@@ -144,7 +144,39 @@ sap.ui.define([
 
             oTarget.addDependent(oPopover);
             oPopover.openBy(oTarget);
-        }
+        }, onPlaceOrder() {
+            const oWizard = this.byId("checkoutWizard");
+            oWizard.discardProgress(oWizard.getSteps()[0]);
+            const oModel = this.getView().getModel('view');
+            const data = oModel.getData();
+            console.log("Address", data.delivery)
+            console.log("User Id", this.userData.ID)
+            console.log("Payment Method", data.paymentMethod)
 
+            const model = this.getOwnerComponent().getModel();
+            const oActionContext = model.bindContext("/checkout(...)");
+            oActionContext.setParameter("userID", this.userData.ID);
+            oActionContext.setParameter("address", data.delivery);
+            oActionContext.setParameter("paymentMethod", data.paymentMethod);
+
+            oActionContext.execute().then(() => {
+                MessageToast.show("Order Placed");
+                const oCartModel = this.getOwnerComponent().getModel("cart");
+
+                oCartModel.setData({
+                    items: [],
+                    total: 0,
+                    cartCode: null
+                });
+
+                oCartModel.updateBindings(true);
+                console.log("Removed the cart data from the JSONModel");
+                this.getOwnerComponent().getTargets().display("TargetECommerceHub");
+            }).catch((err) => {
+                console.error(err);
+                this.getOwnerComponent().getTargets().display("TargetECommerceHub");
+            });
+
+        }
     });
 });

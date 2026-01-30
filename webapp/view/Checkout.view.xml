@@ -205,27 +205,26 @@
                         <WizardStep
                             id="ConfirmStep"
                             title="Confirm Order"
+                            complete="onPlaceOrder"
                             icon="sap-icon://accept"
                         >
                             <ObjectHeader
                                 title="Order Summary"
-                                number="{/totalAmount}"
-                                numberUnit="EUR"
                             >
                                 <attributes>
                                     <ObjectAttribute text="Delivery Address" />
                                     <ObjectAttribute
-                                        text="{/delivery/address}, {/delivery/city}"
+                                        text="{view>/delivery/address} {view>/delivery/city}"
                                     />
                                     <ObjectAttribute text="Payment Method" />
-                                    <ObjectAttribute text="{/paymentMethod}" />
+                                    <ObjectAttribute text="{view>/paymentMethod}" />
                                 </attributes>
                             </ObjectHeader>
                         </WizardStep>
                     </Wizard>
                 </content>
 
-                <footer>
+                <!-- <footer>
                     <OverflowToolbar>
                         <ToolbarSpacer />
                         <Button
@@ -234,7 +233,7 @@
                             press="onPlaceOrder"
                         />
                     </OverflowToolbar>
-                </footer>
+                </footer> -->
             </Page>
         </pages>
     </NavContainer>
